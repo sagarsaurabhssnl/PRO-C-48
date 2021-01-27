@@ -40,7 +40,7 @@ function preload() {
     nitroBottleImg = loadImage("img/nitrobottle.png");
     speedometerImg = loadImage("img/speedometer.png");
     speedometerHandImg = loadImage("img/hand.png");
-    clebrationImg1 = loadImage("img/source.gif");
+    clebrationImg1 = loadImage("img/congratulation.jpg");
     flameImg = loadImage("img/flame.png");
 }
 
