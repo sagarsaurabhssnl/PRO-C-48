@@ -16,7 +16,7 @@ let lives = 10, livesImg;
 let finishLine, finishLineImg;
 let speedometer, speedometerImg, speedometerHand, speedometerHandImg;
 let celebration, congratsImg, winnerImg, gameOverImg;
-let flameImg, applaudSound, gameoverSound;
+let flameImg, applaudSound, gameoverSound, ready=false;
 
 function preload() {
     nitroImg = loadImage("img/nitro.png");
@@ -77,6 +77,9 @@ function setup() {
             speedometerHand.addImage(speedometerHandImg);
             speedometer.scale = 0.3;
             speedometerHand.scale = 0.3;
+            speedometer.visible = false;
+            speedometerHand.visible = false;
+            ready=true;
         }, 1180);
         instruction = createSprite(camera.position.x, 500);
         instruction.addImage(instructionImg);
@@ -129,6 +132,8 @@ function draw() {
             playerCar.flame.visible = false;
             carSpeed = -30;
         }
+        speedometer.visible = true;
+        speedometerHand.visible = true;
     } else {
         push();
         translate(camera.x - 570, camera.y + 250);
@@ -138,6 +143,10 @@ function draw() {
         text("Press C for Source Code", 5, 15);
         text("Press R to reload the game", 5, 30);
         pop();
+        if (ready) {
+            speedometer.visible = false;
+            speedometerHand.visible = false;
+        }
     }
 }
 
@@ -187,6 +196,7 @@ function policeCatch() {
         playerCar.car.destroy();
         blast.play();
         blast.visible = true;
+        playerCar.flame.visible = false;
         setTimeout(() => {
             blast.pause();
             blast.visible = false;
