@@ -4,7 +4,7 @@ function nitroSpawn() {
         nitro.addImage(nitroImg);
         nitro.setCollider("rectangle", 0, 0, 100, 200);
         nitro.scale = 0.4;
-        nitro.lifetime = 100;
+        nitro.lifetime = 400;
         nitroSpawned = true;
     }
     if (nitroSpawned && playerCar.car.isTouching(nitro)) {

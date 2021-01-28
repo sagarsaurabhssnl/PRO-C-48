@@ -2,26 +2,29 @@ class Player {
     constructor() {
         track1 = createSprite(590, 300);
         track2 = createSprite(590, -4000);
-        track1.addImage(trackImg);
-        track2.addImage(trackImg);
-        trackSelector = track1;
         playerxPos = Math.round(random(0, 5));
         this.flame = createSprite(playerX[playerxPos], 300 + 80);
-        this.flame.addImage(flameImg);
-        this.flame.scale = 0.1;
-        this.flame.visible = false;
         this.car = createSprite(playerX[playerxPos], 300);
+        track1.addImage(trackImg);
+        track2.addImage(trackImg);
+        this.flame.addImage(flameImg);
+        this.car.addImage(carImg);
+        this.flame.scale = 0.1;
+        this.car.scale = 0.5;
+        this.flame.visible = false;
         this.car.visible = false;
         this.vel = this.car.velocityY;
-        this.car.scale = 0.5;
-        this.car.addImage(carImg);
         distCheck = this.car.y * (-1) + 500;
+        trackSelector = track1;
     }
     controls() {
         if (this.car.y > -50000) {
             camera.position.y = this.car.y - 150;
         } else {
             gameState = "end";
+            setTimeout(() => {
+                enterEndStatewin();
+            })
         }
         if (distanceCheck(obsDist, 500, distance)) {
             var obs1 = new Obstacle1(this.car.y - 600);

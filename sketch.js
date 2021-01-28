@@ -16,7 +16,7 @@ let lives = 10, livesImg;
 let finishLine, finishLineImg;
 let speedometer, speedometerImg, speedometerHand, speedometerHandImg;
 let celebration, congratsImg, winnerImg, gameOverImg;
-let flameImg;
+let flameImg, applaudSound, gameoverSound;
 
 function preload() {
     nitroImg = loadImage("img/nitro.png");
@@ -44,6 +44,8 @@ function preload() {
     winnerImg = loadImage("img/winner.png");
     gameOverImg = loadImage("img/gameover.png");
     flameImg = loadImage("img/flame.png");
+    applaudSound = loadSound("audio/applaud.mp3");
+    gameoverSound = loadSound("audio/gameover.mp3");
 }
 
 function setup() {
@@ -75,8 +77,6 @@ function setup() {
             speedometerHand.addImage(speedometerHandImg);
             speedometer.scale = 0.3;
             speedometerHand.scale = 0.3;
-
-            // celebration.addImage("winning",celebrationImg2);
         }, 1180);
         instruction = createSprite(camera.position.x, 500);
         instruction.addImage(instructionImg);
@@ -101,16 +101,16 @@ function draw() {
     mainMenu();
     policeCatch();
     drawSprites();
-    push();
-    translate(camera.x - 570, camera.y + 250);
-    fill(200);
-    rect(0, 0, 200, 50);
-    fill(0);
-    text("Press C for Source Code", 5, 15);
-    text("Press R to reload the game", 5, 30);
-    text("Away From Police Car :" + policeCarDiffrence, 5, 45);
-    pop();
     if (gameState === "play") {
+        push();
+        translate(camera.x - 570, camera.y + 250);
+        fill(200);
+        rect(0, 0, 200, 50);
+        fill(0);
+        text("Press C for Source Code", 5, 15);
+        text("Press R to reload the game", 5, 30);
+        text("Away From Police Car :" + policeCarDiffrence, 5, 45);
+        pop();
         if (started === true) {
             if (nitroTime > 0) {
                 fill("#ac518d");
@@ -129,6 +129,15 @@ function draw() {
             playerCar.flame.visible = false;
             carSpeed = -30;
         }
+    } else {
+        push();
+        translate(camera.x - 570, camera.y + 250);
+        fill(200);
+        rect(0, 0, 200, 35);
+        fill(0);
+        text("Press C for Source Code", 5, 15);
+        text("Press R to reload the game", 5, 30);
+        pop();
     }
 }
 
@@ -152,10 +161,6 @@ function keyPressed() {
     }
     if (keyCode === 37 && playerxPos > 0 && gameState === "play") {
         playerxPos -= 1;
-        // console.log(playerX[playerxPos]);
-        // for (var z = playerCar.car.x; z < playerX[playerxPos]; z--) {
-        //     playerCar.car.x = z;
-        // }
     }
     if (keyCode === 39 && playerxPos < 5 && gameState === "play") {
         playerxPos += 1;
@@ -176,7 +181,7 @@ function distanceCheck(referencePoint1, referencePoint2, distanceParameter) {
     }
 }
 function policeCatch() {
-    if (playerCar.car.y >= police.car1.y && gameState === "play") {
+    if (playerCar.car.y >= police.car1.y && gameState === "play" || lives <= 0 && gameState === "play") {
         playerCar.car.velocityY = 0;
         gameState = "end";
         playerCar.car.destroy();
@@ -196,8 +201,10 @@ function policeCatch() {
 
 function enterEndStatewin() {
     celebration = createSprite(camera.position.x, camera.position.y);
-    celebration.addImage("congrats",congratsImg);
-    celebration.addImage("winner",winnerImg);
+    celebration.addImage("congrats", congratsImg);
+    celebration.addImage("winner", winnerImg);
+    destroyEverything();
+    applaudSound.play();
     setTimeout(() => {
         celebration.changeImage("winner");
     }, 2000);
@@ -206,4 +213,6 @@ function enterEndStatewin() {
 function enterEndStateover() {
     celebration = createSprite(camera.position.x, camera.position.y);
     celebration.addImage(gameOverImg);
+    destroyEverything();
+    gameoverSound.play();
 }
