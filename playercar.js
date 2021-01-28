@@ -61,6 +61,6 @@ class Player {
         speedometer.y = camera.position.y + 250;
         speedometerHand.y = camera.position.y + 250;
         this.flame.x = this.car.x;
-        this.flame.y = this.car.y + 80;
+        this.flame.y = camera.position.y + 230;
     }
 }

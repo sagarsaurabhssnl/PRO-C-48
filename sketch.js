@@ -15,7 +15,7 @@ let instructionImg, instruction;
 let lives = 10, livesImg;
 let finishLine, finishLineImg;
 let speedometer, speedometerImg, speedometerHand, speedometerHandImg;
-let celebration, celebrationImg1, celebrationImg2;
+let celebration, congratsImg, winnerImg, gameOverImg;
 let flameImg;
 
 function preload() {
@@ -40,7 +40,9 @@ function preload() {
     nitroBottleImg = loadImage("img/nitrobottle.png");
     speedometerImg = loadImage("img/speedometer.png");
     speedometerHandImg = loadImage("img/hand.png");
-    clebrationImg1 = loadImage("img/congratulation.jpg");
+    congratsImg = loadImage("img/congratulation.png");
+    winnerImg = loadImage("img/winner.png");
+    gameOverImg = loadImage("img/gameover.png");
     flameImg = loadImage("img/flame.png");
 }
 
@@ -73,8 +75,10 @@ function setup() {
             speedometerHand.addImage(speedometerHandImg);
             speedometer.scale = 0.3;
             speedometerHand.scale = 0.3;
+
+            // celebration.addImage("winning",celebrationImg2);
         }, 1180);
-        instruction = createSprite(camera.position.x, camera.position.y + 200);
+        instruction = createSprite(camera.position.x, 500);
         instruction.addImage(instructionImg);
         instruction.scale = 0.5;
     }, 3500);
@@ -87,7 +91,6 @@ function draw() {
     imageMode(CENTER);
     image(trackImg, 590, 5000);
     pop();
-    console.log(track1.depth);
     finishLine.depth = (((track1.depth + track2.depth) / 2) + 1);
     distance = ((playerCar.car.y - 300));
     blast.y = playerCar.car.y;
@@ -99,34 +102,33 @@ function draw() {
     policeCatch();
     drawSprites();
     push();
-    translate(camera.x - 570, camera.y + 200);
+    translate(camera.x - 570, camera.y + 250);
     fill(200);
-    rect(0, 0, 200, 80);
+    rect(0, 0, 200, 50);
     fill(0);
     text("Press C for Source Code", 5, 15);
     text("Press R to reload the game", 5, 30);
-    text("Game is under construction", 5, 45);
-    text("Away From Police Car :" + policeCarDiffrence, 5, 75);
-    text("Use Arrow keys to control the car", 5, 60);
+    text("Away From Police Car :" + policeCarDiffrence, 5, 45);
     pop();
-    fill(150);
-    if (started === true) {
-        if (nitroTime > 0) {
-            fill("#ac518d");
-            rect(1050, camera.position.y - 150, 50, nitroTime * -3);
-            image(nitroBottleImg, 1050, camera.position.y - 250, 50, 100);
+    if (gameState === "play") {
+        if (started === true) {
+            if (nitroTime > 0) {
+                fill("#ac518d");
+                rect(1050, camera.position.y - 150, 50, nitroTime * -3);
+                image(nitroBottleImg, 1050, camera.position.y - 250, 50, 100);
+            }
         }
-    }
-    for (var t = 0, x = 50; t < lives; t++) {
-        image(livesImg, x, camera.position.y - 250, 50, 50);
-        x += 50;
-    }
-    if (nitroTriggered) {
-        playerCar.flame.visible = true;
-        carSpeed = -40;
-    } else {
-        playerCar.flame.visible = false;
-        carSpeed = -30;
+        for (var t = 0, x = 50; t < lives; t++) {
+            image(livesImg, x, camera.position.y - 250, 50, 50);
+            x += 50;
+        }
+        if (nitroTriggered) {
+            playerCar.flame.visible = true;
+            carSpeed = -40;
+        } else {
+            playerCar.flame.visible = false;
+            carSpeed = -30;
+        }
     }
 }
 
@@ -160,15 +162,10 @@ function keyPressed() {
     }
     if (keyCode === 32 && nitroTriggered === false && gameState === "play" && nitroTime > 0) {
         nitroTriggered = true;
-        console.log("triggered1");
-        var ni = nitroTime;
-        for (var ni = 0; ni < nitroTime; n++) {
-            console.log("triggered");
-            setTimeout(() => {
-                nitroTime -= 2.5;
-                nitroTriggered = false;
-            }, 2000);
-        }
+        setTimeout(() => {
+            nitroTime -= 2.5;
+            nitroTriggered = false;
+        }, 2000);
     }
 }
 function distanceCheck(referencePoint1, referencePoint2, distanceParameter) {
@@ -192,12 +189,21 @@ function policeCatch() {
                 obs[eobs].destroyEach();
             }
             nitro.destroy();
-            setTimeout(enterEndState(), 2000);
+            setTimeout(enterEndStateover(), 2000);
         }, 1180);
     }
 }
 
-function enterEndState() {
+function enterEndStatewin() {
     celebration = createSprite(camera.position.x, camera.position.y);
-    celebration.addImage(celebrationImg1);
+    celebration.addImage("congrats",congratsImg);
+    celebration.addImage("winner",winnerImg);
+    setTimeout(() => {
+        celebration.changeImage("winner");
+    }, 2000);
+}
+
+function enterEndStateover() {
+    celebration = createSprite(camera.position.x, camera.position.y);
+    celebration.addImage(gameOverImg);
 }
