@@ -16,7 +16,7 @@ let lives = 10, livesImg;
 let finishLine, finishLineImg;
 let speedometer, speedometerImg, speedometerHand, speedometerHandImg;
 let celebration, congratsImg, winnerImg, gameOverImg;
-let flameImg, applaudSound, gameoverSound, ready=false;
+let flameImg, applaudSound, gameoverSound, ready = false;
 
 function preload() {
     nitroImg = loadImage("img/nitro.png");
@@ -79,7 +79,7 @@ function setup() {
             speedometerHand.scale = 0.3;
             speedometer.visible = false;
             speedometerHand.visible = false;
-            ready=true;
+            ready = true;
         }, 1180);
         instruction = createSprite(camera.position.x, 500);
         instruction.addImage(instructionImg);
@@ -162,7 +162,7 @@ function keyPressed() {
     if (keyCode === 67) {
         window.location.href
     }
-    if (keyCode === 38 && gameState === "mainmenu" && blast.visible === false) {
+    if (keyCode === 38 && gameState === "mainmenu" && blast.visible === false && ready === true) {
         gameState = "play";
     }
     if (keyCode === 82) {
